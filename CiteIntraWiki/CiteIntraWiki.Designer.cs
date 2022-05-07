@@ -72,6 +72,7 @@
             this.buttonDel.TabIndex = 1;
             this.buttonDel.Text = "DEL";
             this.buttonDel.UseVisualStyleBackColor = true;
+            this.buttonDel.Click += new System.EventHandler(this.buttonDel_Click);
             // 
             // buttonEdit
             // 
@@ -83,6 +84,7 @@
             this.buttonEdit.TabIndex = 2;
             this.buttonEdit.Text = "EDIT";
             this.buttonEdit.UseVisualStyleBackColor = true;
+            this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
             // 
             // buttonSearch
             // 

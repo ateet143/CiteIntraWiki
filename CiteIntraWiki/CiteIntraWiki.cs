@@ -58,8 +58,8 @@ namespace CiteIntraWiki
 
         private int indexComboBoxItem(string category)
         {
-           int a = comboBoxCategory.FindString(category);
-           return a;
+            int a = comboBoxCategory.FindString(category);
+            return a;
         }
 
 
@@ -77,7 +77,6 @@ namespace CiteIntraWiki
                 info.SetCategory(getComboBoxItem());
                 info.SetStructure(radioButtonText());
                 info.SetDefinition(textBoxDefinition.Text);
-                MessageBox.Show(info.GetDefinition());
                 wiki.Add(info);
                 displayInfo();
             }
@@ -176,6 +175,96 @@ namespace CiteIntraWiki
             int idx = checkRadiobutton(wiki[currentItem].GetStructure());
             _ = (idx == 0) ? radioButtonNonLinear.Checked = true : radioButtonLinear.Checked = true;
 
+        }
+
+        private void buttonDel_Click(object sender, EventArgs e)
+        {
+            if (!checkfordelandedit(out string message))
+            {
+                //Status strip message
+                return;
+            }
+
+            DialogResult delTask = MessageBox.Show("Data will Permanently Deleted,Do you want to Continue?", "Delete the data...", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (delTask == DialogResult.Yes)
+            {
+                if (checkvalidTextBox(textBoxName, out string messageName) && checkvalidTextBox(textBoxDefinition, out string messageDef))
+                {
+                    wiki.RemoveAt(listViewDisplay.SelectedIndices[0]);
+                    displayInfo();
+                    //status strip message
+                }
+
+            }
+            else
+            {
+                //status strip (user cancelled operation)
+            }
+            textBoxClear();
+            defaultComboRadio();
+        }
+
+        private void buttonEdit_Click(object sender, EventArgs e)
+        {
+            if (!checkfordelandedit(out string message))
+            {
+                //Status strip message
+                return;
+            }
+
+
+            DialogResult modifyTask = MessageBox.Show("Data will Permanently Edited,Do you want to Continue?", "Edit the data...", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (modifyTask == DialogResult.Yes)
+            {
+                string messageName = string.Empty;
+                string messageDef = string.Empty;
+                if (checkvalidTextBox(textBoxName, out messageName) && checkvalidTextBox(textBoxDefinition, out messageDef))
+                {
+                    int currentItem = listViewDisplay.SelectedIndices[0];
+                    wiki[currentItem].SetName(textBoxName.Text);
+                    wiki[currentItem].SetDefinition(textBoxDefinition.Text);
+                    wiki[currentItem].SetCategory(getComboBoxItem());
+                    wiki[currentItem].SetStructure(radioButtonText());
+                    displayInfo();
+                    //status strip message
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(messageName))
+                    {
+                        MessageBox.Show(messageName); //replace with status strip
+                    }
+                    if (!string.IsNullOrEmpty(messageDef))
+                    {
+                        MessageBox.Show(messageDef); //replace with status strip
+                    }
+                }
+
+            }
+
+            else
+            {
+                //status strip
+            }
+            textBoxClear();
+            defaultComboRadio();
+        }
+
+        //check if the list is empty and if the item is not selected from the list.
+        private bool checkfordelandedit(out string message)
+        {
+            if (listViewDisplay.Items.Count == 0)
+            {
+                message = "List is empty/Application does not contains any data";
+                return false;
+            }
+            if (listViewDisplay.Items[0].Selected == false)
+            {
+                message = "Item not selected from the List";
+                return false;
+            }
+            message = "";
+            return true;
         }
     }
 }
