@@ -1,3 +1,7 @@
+/// Created by Atit
+/// Version 1
+/// This application is a prototype of the wikipedia, application has used List<T> to store the  Data Structure information,However user can able to ADD, EDIT and DELETE the information in the application.
+/// Similarly, application open and saves file in the home folder, additionally user can able to sort and search the data by entering data in the textbox.
 namespace CiteIntraWiki
 {
     public partial class CiteIntraWiki : Form
@@ -16,13 +20,13 @@ namespace CiteIntraWiki
         {
             //6.4 Create a custom method to populate the ComboBox when the Form Load method is called.
             populateComboBox(comboCategory);
-            comboBoxCategory.SelectedIndex = 0;
-            radioButtonLinear.Checked = true;
+            defaultComboRadio();
         }
 
+        //6.9 Create a single custom method that will sort and then display the Name and Category from the wiki information in the list.
         private void displayInfo()
         {
-            
+            wiki.Sort();
             listViewDisplay.Items.Clear();
             foreach (Information info in wiki)
             {
@@ -32,7 +36,7 @@ namespace CiteIntraWiki
             }
 
         }
-        
+
         //6.4 Create a custom method to populate the ComboBox when the Form Load method is called.
         private void populateComboBox(string[] newComboCategory)
         {
@@ -52,6 +56,12 @@ namespace CiteIntraWiki
             string category = comboBoxCategory.GetItemText(comboBoxCategory.SelectedItem);
         }
 
+        private int indexComboBoxItem(string category)
+        {
+           int a = comboBoxCategory.FindString(category);
+           return a;
+        }
+
 
         #region ADD
         // 6.3 Create a button method to ADD a new item to the list.
@@ -65,13 +75,11 @@ namespace CiteIntraWiki
                 Information info = new Information();
                 info.SetName(textBoxName.Text);
                 info.SetCategory(getComboBoxItem());
-                info.SetStructure(radioButtonText(radioButtonLinear, radioButtonNonLinear));
+                info.SetStructure(radioButtonText());
                 info.SetDefinition(textBoxDefinition.Text);
                 MessageBox.Show(info.GetDefinition());
                 wiki.Add(info);
                 displayInfo();
-
-
             }
             else
             {
@@ -84,9 +92,14 @@ namespace CiteIntraWiki
                     MessageBox.Show(messageDef);
                 }
             }
+            textBoxClear();
+            defaultComboRadio();
+            textBoxName.Focus();
+
         }
         #endregion
-
+        //6.5 Create a custom ValidName method which will take a parameter string value from the Textbox Name and returns a Boolean after checking for duplicates.
+        //Use the built in List<T> method “Exists” to answer this requirement.
         private bool checkvalidTextBox(TextBox textbox, out string message)
         {
             message = string.Empty;
@@ -105,21 +118,64 @@ namespace CiteIntraWiki
             return true;
         }
 
-        private string radioButtonText(RadioButton radioButtonLinear, RadioButton radioButtonNLinear)
+        //6.6 Create two methods to highlight and return the values from the Radio button GroupBox.
+        //The first method must return a string value from the selected radio button (Linear or Non-Linear). 
+        private string radioButtonText()
         {
-            string structure = string.Empty;
-            RadioButton radioStructure = new RadioButton();
-            if (radioButtonLinear.Checked)
+            var radioStructure = new RadioButton();
+
+            foreach (var rdo in groupBoxStructure.Controls.OfType<RadioButton>())
             {
-                radioStructure = radioButtonNLinear;
-            }
-            if(radioButtonNLinear.Checked)
-            {
-                radioStructure = radioButtonNLinear;
+                if (rdo.Checked)
+                {
+                    radioStructure = rdo;
+                    break;
+                }
             }
             return radioStructure.Text;
+
         }
 
-      
+        //6.6 Create two methods to highlight and return the values from the Radio button GroupBox.
+        //The second method must send an integer index which will highlight an appropriate radio button.
+        private int checkRadiobutton(string structure)
+        {
+            var radioStructure = new RadioButton();
+            foreach (var rdo in groupBoxStructure.Controls.OfType<RadioButton>())
+            {
+                if (rdo.Text.Equals(structure))
+                {
+                    radioStructure = rdo;
+                    break;
+                }
+            }
+            return groupBoxStructure.Controls.GetChildIndex(radioStructure);
+
+        }
+
+        private void textBoxClear()
+        {
+            textBoxName.Clear();
+            textBoxDefinition.Clear();
+            textBoxName.Focus();
+        }
+
+        private void defaultComboRadio()
+        {
+            comboBoxCategory.SelectedIndex = 0;
+            radioButtonLinear.Checked = true;
+        }
+
+        private void listViewDisplay_MouseClick(object sender, MouseEventArgs e)
+        {
+            int currentItem = listViewDisplay.SelectedIndices[0];
+            textBoxName.Text = wiki[currentItem].GetName();
+            textBoxDefinition.Text = wiki[currentItem].GetDefinition();
+            wiki[currentItem].GetCategory();
+            comboBoxCategory.SelectedIndex = indexComboBoxItem(wiki[currentItem].GetCategory());
+            int idx = checkRadiobutton(wiki[currentItem].GetStructure());
+            _ = (idx == 0) ? radioButtonNonLinear.Checked = true : radioButtonLinear.Checked = true;
+
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace CiteIntraWiki
     
   
     [Serializable]
-    internal class Information
+    internal class Information : IComparable<Information>
     {
 
         #region Attributes
@@ -23,7 +23,9 @@ namespace CiteIntraWiki
 
         #region Constructor
         public Information()
-        {}
+        {
+            name = "n/a"; category = "n/a"; structure = "n/a"; definition = "n/a"; 
+        }
 
         public Information(string inputName, string inputCategory, string inputStructure, string inputdefintion)
         {
@@ -88,6 +90,10 @@ namespace CiteIntraWiki
             {
                 if (isSentence)
                 {
+                    if(letter == ' ')
+                    {
+                        continue;
+                    }
                     sb.Append(char.ToUpper(letter));
                     isSentence = false;
                 }
@@ -102,6 +108,12 @@ namespace CiteIntraWiki
             }
             definition = sb.ToString();
             
+        }
+
+        public int CompareTo(Information other)
+        {
+            int result = name.CompareTo(other.name);
+            return result;
         }
 
         #endregion
