@@ -168,13 +168,7 @@ namespace CiteIntraWiki
         private void listViewDisplay_MouseClick(object sender, MouseEventArgs e)
         {
             int currentItem = listViewDisplay.SelectedIndices[0];
-            textBoxName.Text = wiki[currentItem].GetName();
-            textBoxDefinition.Text = wiki[currentItem].GetDefinition();
-            wiki[currentItem].GetCategory();
-            comboBoxCategory.SelectedIndex = indexComboBoxItem(wiki[currentItem].GetCategory());
-            int idx = checkRadiobutton(wiki[currentItem].GetStructure());
-            _ = (idx == 0) ? radioButtonNonLinear.Checked = true : radioButtonLinear.Checked = true;
-
+            showInfoToAssociateInput(currentItem);
         }
 
         private void buttonDel_Click(object sender, EventArgs e)
@@ -265,6 +259,49 @@ namespace CiteIntraWiki
             }
             message = "";
             return true;
+        }
+
+        private void buttonSearch_Click(object sender, EventArgs e)
+        {
+           
+            if (!string.IsNullOrEmpty(textBoxInput.Text))
+            {
+                if (listViewDisplay.Items.Count == 0)
+                {
+                    //Status strip no item in the list
+                    return;
+                }
+                wiki.Sort();
+                int receivedIndex = wiki.BinarySearch(new Information(textBoxInput.Text, "", "", ""));
+                if(receivedIndex >= 0)
+                {
+                    listViewDisplay.Items[receivedIndex].Selected = true;
+                    listViewDisplay.Select();
+                    showInfoToAssociateInput(receivedIndex);
+                    //Status strip message found
+                }
+                else
+                {
+                    //Status strip message not found
+                }
+            }
+            else
+            {
+                //Status strip message for not typing in textboxinput
+            }
+           textBoxInput.Clear();
+          
+
+        }
+       
+        private void showInfoToAssociateInput(int indexFromListView)
+        {
+            textBoxName.Text = wiki[indexFromListView].GetName();
+            textBoxDefinition.Text = wiki[indexFromListView].GetDefinition();
+            wiki[indexFromListView].GetCategory();
+            comboBoxCategory.SelectedIndex = indexComboBoxItem(wiki[indexFromListView].GetCategory());
+            int idx = checkRadiobutton(wiki[indexFromListView].GetStructure());
+            _ = (idx == 0) ? radioButtonNonLinear.Checked = true : radioButtonLinear.Checked = true;
         }
     }
 }

@@ -96,6 +96,7 @@
             this.buttonSearch.TabIndex = 3;
             this.buttonSearch.Text = "SEARCH";
             this.buttonSearch.UseVisualStyleBackColor = true;
+            this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
             // 
             // buttonOpen
             // 
@@ -209,6 +210,7 @@
             this.listViewDisplay.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.listViewDisplay.FullRowSelect = true;
             this.listViewDisplay.Location = new System.Drawing.Point(388, 139);
+            this.listViewDisplay.MultiSelect = false;
             this.listViewDisplay.Name = "listViewDisplay";
             this.listViewDisplay.Size = new System.Drawing.Size(328, 381);
             this.listViewDisplay.TabIndex = 15;
