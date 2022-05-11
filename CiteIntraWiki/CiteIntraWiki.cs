@@ -252,7 +252,7 @@ namespace CiteIntraWiki
         }
         #endregion
 
-        private void buttonOpen_Click(object sender, EventArgs e)
+       /* private void buttonOpen_Click(object sender, EventArgs e)
         {
 
         }
@@ -260,7 +260,7 @@ namespace CiteIntraWiki
         private void buttonSave_Click(object sender, EventArgs e)
         {
 
-        }
+        }*/
 
 
 
