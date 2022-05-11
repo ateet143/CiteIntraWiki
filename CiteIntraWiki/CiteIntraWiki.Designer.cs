@@ -46,8 +46,10 @@
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.groupBoxStructure = new System.Windows.Forms.GroupBox();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBoxStructure.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonAdd
@@ -108,6 +110,7 @@
             this.buttonOpen.TabIndex = 4;
             this.buttonOpen.Text = "OPEN";
             this.buttonOpen.UseVisualStyleBackColor = true;
+            this.buttonOpen.Click += new System.EventHandler(this.buttonOpen_Click);
             // 
             // buttonSave
             // 
@@ -119,6 +122,7 @@
             this.buttonSave.TabIndex = 5;
             this.buttonSave.Text = "SAVE";
             this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
             // textBoxInput
             // 
@@ -134,6 +138,7 @@
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.Size = new System.Drawing.Size(140, 23);
             this.textBoxName.TabIndex = 7;
+            this.textBoxName.DoubleClick += new System.EventHandler(this.textBoxName_DoubleClick);
             // 
             // label1
             // 
@@ -165,7 +170,6 @@
             this.comboBoxCategory.Name = "comboBoxCategory";
             this.comboBoxCategory.Size = new System.Drawing.Size(140, 23);
             this.comboBoxCategory.TabIndex = 10;
-            this.comboBoxCategory.SelectedIndexChanged += new System.EventHandler(this.comboBoxCategory_SelectedIndexChanged);
             // 
             // radioButtonLinear
             // 
@@ -241,12 +245,32 @@
             this.groupBoxStructure.TabStop = false;
             this.groupBoxStructure.Text = "Structure";
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 582);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(757, 22);
+            this.statusStrip1.TabIndex = 17;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.BackColor = System.Drawing.SystemColors.Control;
+            this.toolStripStatusLabel1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(151, 20);
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Visible = false;
+            // 
             // CiteIntraWiki
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.ClientSize = new System.Drawing.Size(757, 604);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBoxStructure);
             this.Controls.Add(this.listViewDisplay);
             this.Controls.Add(this.textBoxDefinition);
@@ -266,6 +290,8 @@
             this.Load += new System.EventHandler(this.CiteIntraWiki_Load);
             this.groupBoxStructure.ResumeLayout(false);
             this.groupBoxStructure.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -291,6 +317,7 @@
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
         private GroupBox groupBoxStructure;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
