@@ -262,8 +262,6 @@ namespace CiteIntraWiki
 
         }*/
 
-
-
         #region UTILITIES
 
         /// <summary>
