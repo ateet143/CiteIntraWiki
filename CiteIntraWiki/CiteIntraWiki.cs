@@ -254,12 +254,12 @@ namespace CiteIntraWiki
 
         private void buttonOpen_Click(object sender, EventArgs e)
         {
-
+            MessageBox.Show("aa");
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-
+            MessageBox.Show("aa");
         }
 
         #region UTILITIES
