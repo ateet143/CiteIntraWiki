@@ -1,3 +1,4 @@
+using System.Text;
 /// Created by Atit
 /// Version 1
 /// This application is a prototype of the wikipedia, application has used List<T> to store the  Data Structure information,However user can able to ADD, EDIT and DELETE the information in the application.
@@ -110,7 +111,7 @@ namespace CiteIntraWiki
         /// if the string match any of the Radiobutton then it will check the RadioButton.
         /// </summary>
         /// <param name="structure">represents string to be stored in RadioButton</param>
-        
+
         private void SetRadiobutton(string structure)
         {
             var radioStructure = new RadioButton();
@@ -163,7 +164,7 @@ namespace CiteIntraWiki
 
         }
         #endregion
-     
+
         #region DELETE
         /// <summary>
         /// 6.7 Create a button method that will delete the currently selected record in the ListView. Ensure the user has the option to backout of this action by using a dialog box. 
@@ -220,9 +221,10 @@ namespace CiteIntraWiki
             {
                 string messageName = string.Empty;
                 string messageDef = string.Empty;
-                if (ValidTextBoxText(textBoxName, out messageName) && ValidTextBoxText(textBoxDefinition, out messageDef))
+                if ((!ValidTextBoxText(textBoxName, out messageName) && ValidTextBoxText(textBoxDefinition, out messageDef)) || (ValidTextBoxText(textBoxName, out messageName) && !ValidTextBoxText(textBoxDefinition, out messageDef)))
                 {
                     int currentItem = listViewDisplay.SelectedIndices[0];
+                    listViewDisplay.Focus();
                     wiki[currentItem].SetName(textBoxName.Text);
                     wiki[currentItem].SetDefinition(textBoxDefinition.Text);
                     wiki[currentItem].SetCategory(GetComboBoxItem());
@@ -252,15 +254,174 @@ namespace CiteIntraWiki
         }
         #endregion
 
+        #region SEARCH
+        /// <summary>
+        /// 6.10 Create a button method that will use the builtin binary search to find a Data Structure name. 
+        /// If the record is found the associated details will populate the appropriate input controls and highlight the name in the ListView.
+        /// At the end of the search process the search input TextBox must be cleared.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonSearch_Click(object sender, EventArgs e)
+        {
+
+            if (!string.IsNullOrEmpty(textBoxInput.Text))
+            {
+                if (listViewDisplay.Items.Count == 0)
+                {
+                    ShowToolStatusLabel("Item Is Empty");
+                    return;
+                }
+                Information info = new Information();
+                info.SetName(textBoxInput.Text);
+                wiki.Sort();
+                int receivedIndex = wiki.BinarySearch(info);
+                if (receivedIndex >= 0)
+                {
+                    listViewDisplay.Items[receivedIndex].Selected = true;
+                    listViewDisplay.Select();
+                    PopulateInput(receivedIndex);
+                    ShowToolStatusLabel(info.GetName() + " is Found");
+                }
+                else
+                {
+                    ShowToolStatusLabel(info.GetName() + " Not Found");
+                }
+            }
+            else
+            {
+                ShowToolStatusLabel("Item Not Selected");
+            }
+            textBoxInput.Clear();
+        }
+        #endregion
+
+        #region OPEN, SAVE
+        /// <summary>
+        /// 6.14 Create two buttons for the manual open and save option; this must use a dialog box to select a file or rename a saved file. All Wiki data is stored/retrieved using a binary file format.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonOpen_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("aa");
+            string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "listItem.bin");
+            OpenFileDialog OpenBinary = new OpenFileDialog();
+            OpenBinary.InitialDirectory = Path.GetDirectoryName(fileName);    // Dialogbox will open from the user Document folder.
+            OpenBinary.Filter = "BIN Files|*.bin";                            // Set the default .bin extension filter in the dialogbox
+            OpenBinary.Title = "Select a BIN File";                           // Set the title of the dialogbox
+
+            if (OpenBinary.ShowDialog() == DialogResult.OK)
+            {
+                fileName = OpenBinary.FileName;
+            }
+            wiki.Clear();
+            OpenFromFile(fileName);
+            DisplayInfo();
         }
 
+        /// <summary>
+        /// when the user click on the save button, it will display save dialogbox which will enable the user to save the data as file.
+        /// If the user cancel the save dialogbox, the data will save in listItem.bin file
+        /// If the user select or type other filename then it will save as the typed or choosed filename.
+        /// calling the SaveToFile(fileName) method which will save the data to the fileName
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("aa");
+            string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "listItem.bin");
+            SaveFileDialog SaveBinary = new SaveFileDialog();
+            SaveBinary.InitialDirectory = Path.GetDirectoryName(fileName);
+            SaveBinary.Filter = "binary files (*.bin)|*.bin|All files (*.*)|*.*";
+            SaveBinary.DefaultExt = "bin";                            // save the file with extension .bin if the user does not save as .bin extension in the filename
+
+            DialogResult sr = SaveBinary.ShowDialog();
+            if (sr == DialogResult.Cancel)
+            {
+                SaveBinary.FileName = fileName;
+            }
+            if (sr == DialogResult.OK)
+            {
+                fileName = SaveBinary.FileName;
+            }
+            SaveToFile(fileName);
         }
+        /// <summary>
+        /// 6.15 The Wiki application will save data when the form closes. 
+        /// When the user close the form, it will ask the user to save the data, yes or no.
+        /// If choosed Yes then the data is saved in listItem.bin file located in user's document folder.
+        /// If choosed No or close then the application will closed without saving the data.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CiteIntraWiki_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult saveWhenClosing = MessageBox.Show("Do you want to save data before closing?", "Data Saving...", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if (saveWhenClosing == DialogResult.Yes)
+            {
+                string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "listItem.bin");
+                SaveToFile(fileName);
+            }
+        }
+        /// <summary>
+        /// Method that creates binaryWriter to save the data to the file
+        /// </summary>
+        /// <param name="fileName">filename for the application that the user want to save data to</param>
+        private void SaveToFile(string fileName)
+        {
+            try
+            {
+                using (var stream = File.Open(fileName, FileMode.Create))
+                {
+                    using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
+                    {
+                        foreach (var item in wiki)
+                        {
+                            writer.Write(item.GetName());
+                            writer.Write(item.GetCategory());
+                            writer.Write(item.GetStructure());
+                            writer.Write(item.GetDefinition());
+                        }
+                    }
+                }
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Method that creates binaryReader to open the data from the file and display the data to the listview.
+        /// </summary>
+        /// <param name="fileName">filename for the application that the user want to open data from</param>
+        private void OpenFromFile(String fileName)
+        {
+            try
+            {
+                using (var stream = File.Open(fileName, FileMode.Open))
+                {
+                    using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
+                    {
+                        while (stream.Position < stream.Length)
+                        {
+                            Information info = new Information();
+                            info.SetName(reader.ReadString());
+                            info.SetCategory(reader.ReadString());
+                            info.SetStructure(reader.ReadString());
+                            info.SetDefinition(reader.ReadString());
+                            wiki.Add(info);
+                        }
+
+                    }
+                }
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+        #endregion
 
         #region UTILITIES
 
@@ -356,49 +517,8 @@ namespace CiteIntraWiki
             }
             return false;
         }
-        /// <summary>
-        /// 6.10 Create a button method that will use the builtin binary search to find a Data Structure name. 
-        /// If the record is found the associated details will populate the appropriate input controls and highlight the name in the ListView.
-        /// At the end of the search process the search input TextBox must be cleared.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
 
-        #region SEARCH
-        private void buttonSearch_Click(object sender, EventArgs e)
-        {
 
-            if (!string.IsNullOrEmpty(textBoxInput.Text))
-            {
-                if (listViewDisplay.Items.Count == 0)
-                {
-                    ShowToolStatusLabel("Item Is Empty");
-                    return;
-                }
-                Information info = new Information();
-                info.SetName(textBoxInput.Text);
-                wiki.Sort();
-                int receivedIndex = wiki.BinarySearch(info);
-                if (receivedIndex >= 0)
-                {
-                    listViewDisplay.Items[receivedIndex].Selected = true;
-                    listViewDisplay.Select();
-                    PopulateInput(receivedIndex);
-                    ShowToolStatusLabel(info.GetName() + " is Found");
-                }
-                else
-                {
-                    ShowToolStatusLabel(info.GetName() + " Not Found");
-                }
-            }
-            else
-            {
-                ShowToolStatusLabel("Item Not Selected");
-            }
-            textBoxInput.Clear();
-            #endregion
-
-        }
         /// <summary>
         /// This method will fill the corresponding data to the input field, such as TextboxName, textBoxDefinition, sets the category and radio button.
         /// For the project is used in Search event and mouseClick event in listview.
@@ -448,6 +568,8 @@ namespace CiteIntraWiki
             TextBoxClear();
             DefaultComboRadio();
         }
+
+
     }
     #endregion
 }

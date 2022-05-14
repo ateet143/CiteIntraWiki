@@ -126,7 +126,7 @@
             // 
             // textBoxInput
             // 
-            this.textBoxInput.Location = new System.Drawing.Point(388, 33);
+            this.textBoxInput.Location = new System.Drawing.Point(388, 21);
             this.textBoxInput.Multiline = true;
             this.textBoxInput.Name = "textBoxInput";
             this.textBoxInput.Size = new System.Drawing.Size(200, 33);
@@ -199,6 +199,7 @@
             // 
             // textBoxDefinition
             // 
+            this.textBoxDefinition.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxDefinition.Location = new System.Drawing.Point(30, 312);
             this.textBoxDefinition.Multiline = true;
             this.textBoxDefinition.Name = "textBoxDefinition";
@@ -225,7 +226,7 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Name";
-            this.columnHeader1.Width = 150;
+            this.columnHeader1.Width = 200;
             // 
             // columnHeader2
             // 
@@ -287,6 +288,7 @@
             this.Controls.Add(this.buttonAdd);
             this.Name = "CiteIntraWiki";
             this.Text = "Data Structures Wiki";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CiteIntraWiki_FormClosing);
             this.Load += new System.EventHandler(this.CiteIntraWiki_Load);
             this.groupBoxStructure.ResumeLayout(false);
             this.groupBoxStructure.PerformLayout();
