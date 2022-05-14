@@ -39,13 +39,17 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.comboBoxCategory = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.radioButtonLinear = new System.Windows.Forms.RadioButton();
             this.radioButtonNonLinear = new System.Windows.Forms.RadioButton();
             this.textBoxDefinition = new System.Windows.Forms.TextBox();
             this.listViewDisplay = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.groupBoxStructure = new System.Windows.Forms.GroupBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.groupBoxStructure.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonAdd
@@ -70,6 +74,7 @@
             this.buttonDel.TabIndex = 1;
             this.buttonDel.Text = "DEL";
             this.buttonDel.UseVisualStyleBackColor = true;
+            this.buttonDel.Click += new System.EventHandler(this.buttonDel_Click);
             // 
             // buttonEdit
             // 
@@ -81,6 +86,7 @@
             this.buttonEdit.TabIndex = 2;
             this.buttonEdit.Text = "EDIT";
             this.buttonEdit.UseVisualStyleBackColor = true;
+            this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
             // 
             // buttonSearch
             // 
@@ -92,6 +98,7 @@
             this.buttonSearch.TabIndex = 3;
             this.buttonSearch.Text = "SEARCH";
             this.buttonSearch.UseVisualStyleBackColor = true;
+            this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
             // 
             // buttonOpen
             // 
@@ -103,6 +110,7 @@
             this.buttonOpen.TabIndex = 4;
             this.buttonOpen.Text = "OPEN";
             this.buttonOpen.UseVisualStyleBackColor = true;
+            this.buttonOpen.Click += new System.EventHandler(this.buttonOpen_Click);
             // 
             // buttonSave
             // 
@@ -114,10 +122,11 @@
             this.buttonSave.TabIndex = 5;
             this.buttonSave.Text = "SAVE";
             this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
             // textBoxInput
             // 
-            this.textBoxInput.Location = new System.Drawing.Point(388, 33);
+            this.textBoxInput.Location = new System.Drawing.Point(388, 21);
             this.textBoxInput.Multiline = true;
             this.textBoxInput.Name = "textBoxInput";
             this.textBoxInput.Size = new System.Drawing.Size(200, 33);
@@ -129,6 +138,7 @@
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.Size = new System.Drawing.Size(140, 23);
             this.textBoxName.TabIndex = 7;
+            this.textBoxName.DoubleClick += new System.EventHandler(this.textBoxName_DoubleClick);
             // 
             // label1
             // 
@@ -160,25 +170,13 @@
             this.comboBoxCategory.Name = "comboBoxCategory";
             this.comboBoxCategory.Size = new System.Drawing.Size(140, 23);
             this.comboBoxCategory.TabIndex = 10;
-            this.comboBoxCategory.SelectedIndexChanged += new System.EventHandler(this.comboBoxCategory_SelectedIndexChanged);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label3.Location = new System.Drawing.Point(29, 212);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(85, 23);
-            this.label3.TabIndex = 11;
-            this.label3.Text = "Structure";
             // 
             // radioButtonLinear
             // 
             this.radioButtonLinear.AutoSize = true;
             this.radioButtonLinear.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.radioButtonLinear.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.radioButtonLinear.Location = new System.Drawing.Point(29, 252);
+            this.radioButtonLinear.Location = new System.Drawing.Point(10, 40);
             this.radioButtonLinear.Name = "radioButtonLinear";
             this.radioButtonLinear.Size = new System.Drawing.Size(71, 25);
             this.radioButtonLinear.TabIndex = 12;
@@ -191,7 +189,7 @@
             this.radioButtonNonLinear.AutoSize = true;
             this.radioButtonNonLinear.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.radioButtonNonLinear.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.radioButtonNonLinear.Location = new System.Drawing.Point(128, 252);
+            this.radioButtonNonLinear.Location = new System.Drawing.Point(87, 40);
             this.radioButtonNonLinear.Name = "radioButtonNonLinear";
             this.radioButtonNonLinear.Size = new System.Drawing.Size(107, 25);
             this.radioButtonNonLinear.TabIndex = 13;
@@ -201,6 +199,7 @@
             // 
             // textBoxDefinition
             // 
+            this.textBoxDefinition.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxDefinition.Location = new System.Drawing.Point(30, 312);
             this.textBoxDefinition.Multiline = true;
             this.textBoxDefinition.Name = "textBoxDefinition";
@@ -214,22 +213,57 @@
             this.columnHeader2});
             this.listViewDisplay.Font = new System.Drawing.Font("Segoe UI", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.listViewDisplay.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listViewDisplay.FullRowSelect = true;
             this.listViewDisplay.Location = new System.Drawing.Point(388, 139);
+            this.listViewDisplay.MultiSelect = false;
             this.listViewDisplay.Name = "listViewDisplay";
             this.listViewDisplay.Size = new System.Drawing.Size(328, 381);
             this.listViewDisplay.TabIndex = 15;
             this.listViewDisplay.UseCompatibleStateImageBehavior = false;
             this.listViewDisplay.View = System.Windows.Forms.View.Details;
+            this.listViewDisplay.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listViewDisplay_MouseClick);
             // 
             // columnHeader1
             // 
             this.columnHeader1.Text = "Name";
-            this.columnHeader1.Width = 150;
+            this.columnHeader1.Width = 200;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Category";
             this.columnHeader2.Width = 150;
+            // 
+            // groupBoxStructure
+            // 
+            this.groupBoxStructure.Controls.Add(this.radioButtonNonLinear);
+            this.groupBoxStructure.Controls.Add(this.radioButtonLinear);
+            this.groupBoxStructure.Font = new System.Drawing.Font("Segoe UI", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.groupBoxStructure.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.groupBoxStructure.Location = new System.Drawing.Point(30, 206);
+            this.groupBoxStructure.Name = "groupBoxStructure";
+            this.groupBoxStructure.Size = new System.Drawing.Size(200, 100);
+            this.groupBoxStructure.TabIndex = 16;
+            this.groupBoxStructure.TabStop = false;
+            this.groupBoxStructure.Text = "Structure";
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 582);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(757, 22);
+            this.statusStrip1.TabIndex = 17;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.BackColor = System.Drawing.SystemColors.Control;
+            this.toolStripStatusLabel1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(151, 20);
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Visible = false;
             // 
             // CiteIntraWiki
             // 
@@ -237,11 +271,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.ClientSize = new System.Drawing.Size(757, 604);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.groupBoxStructure);
             this.Controls.Add(this.listViewDisplay);
             this.Controls.Add(this.textBoxDefinition);
-            this.Controls.Add(this.radioButtonNonLinear);
-            this.Controls.Add(this.radioButtonLinear);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.comboBoxCategory);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -255,7 +288,12 @@
             this.Controls.Add(this.buttonAdd);
             this.Name = "CiteIntraWiki";
             this.Text = "Data Structures Wiki";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CiteIntraWiki_FormClosing);
             this.Load += new System.EventHandler(this.CiteIntraWiki_Load);
+            this.groupBoxStructure.ResumeLayout(false);
+            this.groupBoxStructure.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -274,12 +312,14 @@
         private Label label1;
         private Label label2;
         private ComboBox comboBoxCategory;
-        private Label label3;
         private RadioButton radioButtonLinear;
         private RadioButton radioButtonNonLinear;
         private TextBox textBoxDefinition;
         private ListView listViewDisplay;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
+        private GroupBox groupBoxStructure;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
